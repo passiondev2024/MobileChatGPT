@@ -5,4 +5,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="chat_input">입력하세요.</string>
     <string name="title_home">home</string>
+    <string name="home_empty">Currently, there is no chat.\n         Start a new chat.</string>
+    <string name="home_create">create a new chat.</string>
 </resources>
