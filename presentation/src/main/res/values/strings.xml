@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MobileChatGPT</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="chat_input">입력하세요.</string>
+</resources>
