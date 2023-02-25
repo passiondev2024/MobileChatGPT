@@ -8,13 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jusqre.domain.model.ChattingItem
 import com.jusqre.presentation.databinding.ItemChattingBinding
 
-class ChattingAdapter : ListAdapter<ChattingItem, ChattingAdapter.ViewHolder>(diffUtil) {
+class ChattingAdapter(
+    val onClick: (ChattingItem) -> Unit
+) : ListAdapter<ChattingItem, ChattingAdapter.ViewHolder>(diffUtil) {
     class ViewHolder(
-        private val binding: ItemChattingBinding
+        private val binding: ItemChattingBinding,
+        private val onClick: (ChattingItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChattingItem) {
             binding.tvChattingTitle.text = item.chatId
             binding.tvChattingContent.text = item.lastChat
+            binding.root.setOnClickListener {
+                onClick(item)
+            }
         }
     }
 
@@ -22,7 +28,7 @@ class ChattingAdapter : ListAdapter<ChattingItem, ChattingAdapter.ViewHolder>(di
         val binding =
             ItemChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ViewHolder(binding)
+        return ViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

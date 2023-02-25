@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -35,10 +36,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun createNewChat() {
+    fun createNewChat(): ChattingItem {
+        val newID = "test${Random.nextInt(100000)}"
         viewModelScope.launch {
-            chatRepository.insert("test", listOf())
+            chatRepository.insert(newID, listOf())
         }
+        return ChattingItem(newID, listOf(),"")
     }
 
     fun resetUIState() {

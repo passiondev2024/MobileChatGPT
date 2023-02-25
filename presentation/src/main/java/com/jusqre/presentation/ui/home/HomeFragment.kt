@@ -23,7 +23,13 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
-    private val chattingAdapter = ChattingAdapter()
+    private val chattingAdapter = ChattingAdapter {
+        findNavController().navigate(
+            HomeFragmentDirections.actionNavigationHomeToNavigationChat(
+                it
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +43,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnChat.setOnClickListener {
-            homeViewModel.createNewChat()
             homeViewModel.resetUIState()
-            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigationChat())
+            findNavController().navigate(
+                HomeFragmentDirections.actionNavigationHomeToNavigationChat(
+                    homeViewModel.createNewChat()
+                )
+            )
         }
         binding.rvChatList.adapter = chattingAdapter
         binding.rvChatList.layoutManager = LinearLayoutManager(context)
-        binding.rvChatList.isVisible = false
         binding.tvEmpty.isVisible = false
         homeViewModel.getItem()
         initializeCollector()
@@ -53,14 +61,8 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 homeViewModel.uiState.collectLatest {
-                    when (it) {
-                        UIState.READY -> { }
-                        UIState.EMPTY_LIST -> {
-                            binding.tvEmpty.isVisible = true
-                        }
-                        UIState.GET_LIST -> {
-                            binding.rvChatList.isVisible = true
-                        }
+                    if (it == UIState.EMPTY_LIST) {
+                        binding.tvEmpty.isVisible = true
                     }
                 }
             }
