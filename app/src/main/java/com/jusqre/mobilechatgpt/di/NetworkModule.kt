@@ -2,7 +2,7 @@ package com.jusqre.mobilechatgpt.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jusqre.data.chat.ChatGPTDataSource
+import com.jusqre.data.datasource.ChatGPTDataSource
 import com.jusqre.data.network.ChatGPTService
 import com.jusqre.mobilechatgpt.util.CHAT_GPT_KEY
 import com.jusqre.mobilechatgpt.util.CHAT_GPT_URL
@@ -58,7 +58,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideChatGPTRepository(service: ChatGPTService): ChatGPTDataSource =
+    fun provideChatGPTDataSource(service: ChatGPTService): ChatGPTDataSource =
         ChatGPTDataSource(service)
 }
 

@@ -38,6 +38,18 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    fun initializeCurrentChatting(chatList: List<Chat>) {
+        viewModelScope.launch {
+            _chatList.emit(chatList)
+        }
+    }
+
+    fun updateDatabase(id: String) {
+        viewModelScope.launch {
+            chatRepository.update(id, chatList.value)
+        }
+    }
+
     fun updateBotText(newText: String) {
         if (newText.isNotBlank() || chatList.value.last().text.isNotBlank()) {
             val currentList = _chatList.value.toMutableList()

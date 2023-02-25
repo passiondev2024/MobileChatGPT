@@ -1,4 +1,4 @@
-package com.jusqre.data.chat
+package com.jusqre.data.datasource
 
 import com.google.gson.Gson
 import com.jusqre.data.model.ChatGPTRequestDTO

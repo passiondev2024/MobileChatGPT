@@ -1,6 +1,6 @@
 package com.jusqre.mobilechatgpt.di
 
-import com.jusqre.data.chat.ChatRepositoryImpl
+import com.jusqre.data.repository.ChatRepositoryImpl
 import com.jusqre.domain.repository.ChatRepository
 import dagger.Module
 import dagger.Provides

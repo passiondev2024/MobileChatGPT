@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jusqre.presentation.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
     private val chatViewModel: ChatViewModel by viewModels()
     private val chatAdapter = ChatAdapter()
+    private val args: ChatFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +43,7 @@ class ChatFragment : Fragment() {
             stackFromEnd = true
         }
         binding.rvChat.itemAnimator = null
+        chatViewModel.initializeCurrentChatting(args.chattingItem.chatList)
         initializeOnclick()
         initializeCollector()
     }
@@ -76,6 +79,7 @@ class ChatFragment : Fragment() {
                     }.launchIn(this).invokeOnCompletion {
                         binding.tietInput.setText("")
                         binding.tilInput.isClickable = true
+                        chatViewModel.updateDatabase(args.chattingItem.chatId)
                     }
                 }
             }
