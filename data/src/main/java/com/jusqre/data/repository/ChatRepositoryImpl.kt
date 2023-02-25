@@ -21,7 +21,10 @@ class ChatRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(id: String, list: List<Chat>) {
-        return chatLocalDatasource.insert(id, list, list.last().text)
+        if (list.isNotEmpty()) {
+            return chatLocalDatasource.insert(id, list, list.last().text)
+        }
+        return chatLocalDatasource.insert(id, list, "asdf")
     }
 
     override suspend fun deleteById(id: String) {
