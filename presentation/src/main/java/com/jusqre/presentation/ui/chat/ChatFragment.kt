@@ -1,6 +1,7 @@
 package com.jusqre.presentation.ui.chat
 
 import android.os.Bundle
+import android.text.method.KeyListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jusqre.presentation.R
 import com.jusqre.presentation.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -23,10 +24,11 @@ import kotlinx.coroutines.launch
 class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding)
     private val chatViewModel: ChatViewModel by viewModels()
     private val chatAdapter = ChatAdapter()
     private val args: ChatFragmentArgs by navArgs()
+    private lateinit var keyListener: KeyListener
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +45,7 @@ class ChatFragment : Fragment() {
             stackFromEnd = true
         }
         binding.rvChat.itemAnimator = null
+        keyListener = binding.tietInput.keyListener
         chatViewModel.initializeCurrentChatting(args.chattingItem.chatList)
         initializeOnclick()
         initializeCollector()
@@ -59,12 +62,13 @@ class ChatFragment : Fragment() {
     private fun initializeCollector() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                chatViewModel.chatList.filter { it.isNotEmpty() }.collect {
+                chatViewModel.chatList.collect {
+                    if (it.isEmpty()) return@collect
                     chatAdapter.submitList(it) {
                         binding.rvChat.scrollToPosition(it.size - 1)
                     }
                     if (it.last().isMyText) {
-                        binding.tilInput.isClickable = false
+                        disableKeyTouch()
                         chatViewModel.getRequest(it.last().text)
                     }
                 }
@@ -76,14 +80,27 @@ class ChatFragment : Fragment() {
                 chatViewModel.chatGPTRequest.collectLatest { request ->
                     chatViewModel.getChatGptCompletionStream(request).onEach {
                         chatViewModel.updateBotText(it)
-                    }.launchIn(this).invokeOnCompletion {
-                        binding.tietInput.setText("")
-                        binding.tilInput.isClickable = true
+                    }.launchIn(this).invokeOnCompletion { throwable ->
+                        throwable?.let {
+                            chatViewModel.updateBotText(getString(R.string.chat_error))
+                        }
+                        enableKeyTouch()
                         chatViewModel.updateDatabase(args.chattingItem.chatId)
                     }
                 }
             }
         }
+    }
+
+    private fun disableKeyTouch() {
+        binding.tietInput.keyListener = null
+        binding.tilInput.hint = getString(R.string.chat_waiting)
+    }
+
+    private fun enableKeyTouch() {
+        binding.tietInput.setText("")
+        binding.tilInput.hint = getString(R.string.chat_input)
+        binding.tietInput.keyListener = keyListener
     }
 
     override fun onDestroyView() {

@@ -4,6 +4,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="chat_input">입력하세요.</string>
+    <string name="chat_waiting">답변을 기다리는 중입니다.</string>
+    <string name="chat_error">\n오류가 발생했습니다.</string>
+
     <string name="title_home">home</string>
     <string name="home_empty">Currently, there is no chat.\n         Start a new chat.</string>
     <string name="home_create">create a new chat.</string>

@@ -52,6 +52,7 @@ class HomeFragment : Fragment() {
         }
         binding.rvChatList.adapter = chattingAdapter
         binding.rvChatList.layoutManager = LinearLayoutManager(context)
+        binding.rvChatList.itemAnimator = null
         binding.tvEmpty.isVisible = false
         homeViewModel.getItem()
         initializeCollector()
