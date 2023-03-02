@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="data"
-            type="String" />
+            name="chattingItem"
+            type="com.jusqre.domain.model.ChattingItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +22,7 @@
             android:id="@+id/tv_chatting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{chattingItem.chatId}"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -35,9 +36,10 @@
             android:id="@+id/tv_chatting_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:maxLines="3"
             android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@{chattingItem.lastChat}"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
