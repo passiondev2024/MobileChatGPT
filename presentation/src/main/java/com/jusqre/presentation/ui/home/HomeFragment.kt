@@ -7,16 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jusqre.presentation.databinding.FragmentHomeBinding
 import com.jusqre.presentation.model.UIState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -59,22 +56,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeCollector() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                homeViewModel.uiState.collectLatest {
-                    if (it == UIState.EMPTY_LIST) {
-                        binding.tvEmpty.isVisible = true
-                    }
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            homeViewModel.uiState.collectLatest {
+                if (it == UIState.EMPTY_LIST) {
+                    binding.tvEmpty.isVisible = true
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                homeViewModel.chattingListState.collectLatest {
-                    chattingAdapter.submitList(it)
-                }
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            homeViewModel.chattingListState.collectLatest {
+                chattingAdapter.submitList(it)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
