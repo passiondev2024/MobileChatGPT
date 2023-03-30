@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,7 +49,7 @@ class HomeFragment : Fragment() {
         binding.rvChatList.adapter = chattingAdapter
         binding.rvChatList.layoutManager = LinearLayoutManager(context)
         binding.rvChatList.itemAnimator = null
-        binding.tvEmpty.isVisible = false
+        binding.titleVisibility = false
         homeViewModel.getItem()
         initializeCollector()
     }
@@ -58,9 +57,7 @@ class HomeFragment : Fragment() {
     private fun initializeCollector() {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             homeViewModel.uiState.collectLatest {
-                if (it == UIState.EMPTY_LIST) {
-                    binding.tvEmpty.isVisible = true
-                }
+                binding.titleVisibility = it == UIState.EMPTY_LIST
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
