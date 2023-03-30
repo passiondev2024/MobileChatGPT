@@ -9,15 +9,14 @@ import com.jusqre.domain.model.ChattingItem
 import com.jusqre.presentation.databinding.ItemChattingBinding
 
 class ChattingAdapter(
-    val onClick: (ChattingItem) -> Unit
+    private val onClick: (ChattingItem) -> Unit
 ) : ListAdapter<ChattingItem, ChattingAdapter.ViewHolder>(diffUtil) {
     class ViewHolder(
         private val binding: ItemChattingBinding,
         private val onClick: (ChattingItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChattingItem) {
-            binding.tvChattingTitle.text = item.chatId
-            binding.tvChattingContent.text = item.lastChat
+            binding.chattingItem = item
             binding.root.setOnClickListener {
                 onClick(item)
             }

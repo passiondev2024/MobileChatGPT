@@ -6,9 +6,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="data"
-            type="String" />
+            name="chat"
+            type="com.jusqre.domain.model.Chat" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +27,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/CardViewShape.My">
+            app:shapeAppearanceOverlay="@style/CardViewShape.My"
+            app:visibility="@{chat.myText ? View.VISIBLE : View.GONE}">
 
             <TextView
                 android:id="@+id/tv_my_chat"
@@ -45,7 +48,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/CardViewShape.Bot">
+            app:shapeAppearanceOverlay="@style/CardViewShape.Bot"
+            app:visibility="@{chat.myText ? View.GONE : View.VISIBLE}">
 
             <TextView
                 android:id="@+id/tv_bot_chat"

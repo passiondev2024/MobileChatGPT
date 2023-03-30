@@ -2,7 +2,6 @@ package com.jusqre.presentation.ui.chat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,15 +13,11 @@ class ChatAdapter : ListAdapter<Chat, ChatAdapter.ViewHolder>(diffUtil) {
         private val binding: ItemChatBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Chat) {
-            binding.cvMyChat.isVisible = item.isMyText
-            binding.cvBotChat.isVisible = item.isMyText.not()
-            when (item.isMyText) {
-                true -> {
-                    binding.tvMyChat.text = item.text
-                }
-                false -> {
-                    binding.tvBotChat.text = item.text
-                }
+            binding.chat = item
+            if (item.isMyText) {
+                binding.tvMyChat.text = item.text
+            } else {
+                binding.tvBotChat.text = item.text
             }
         }
     }
